@@ -50,10 +50,10 @@ public:
         MaxWell = 1;
     }
 
-    PointWell(welltype wellSize){ //simple constructor
-        CurrentFullness = wellSize;
-        MaxWell = wellSize;
-    }
+//    PointWell(welltype wellSize){ //simple constructor
+//        CurrentFullness = wellSize;
+//        MaxWell = wellSize;
+//    }
 
     PointWell(welltype c, welltype m){
         CurrentFullness = c;
