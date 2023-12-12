@@ -31,7 +31,21 @@ public:
     stattype getArmor(){return Armor;}
     stattype getElementRes(){return ElementResistance;}
 
-
+    stattype setStrength(stattype statIncrease){
+        return Strength + statIncrease;
+    }
+    stattype setIntellect(stattype statIncrease){
+        return Intellect + statIncrease;
+    }
+    stattype setAgility(stattype statIncrease){
+        return Agility + statIncrease;
+    }
+    stattype setArmor(stattype statIncrease){
+        return Armor + statIncrease;
+    }
+    stattype setElementRes(stattype statIncrease){
+        return ElementResistance + statIncrease;
+    }
 
 protected:
     void increaseStats(stattype s = 0, stattype i = 0, stattype a = 0, stattype arm = 0, stattype elres = 0){
