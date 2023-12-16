@@ -12,9 +12,7 @@ class ItemDelegate{
 public:
     std::string Name;
     virtual const char* GetType() = 0;
-    void MarkForDeletion(){marked_for_deletion = true;}
 protected:
-    bool marked_for_deletion = false;
     ItemDelegate(std::string name) : Name(name){}
 };
 
@@ -41,45 +39,24 @@ private:
 
 };
 
-class Item{
-public:
-    const ItemDelegate* GetData() { return _data; }
-    ~Item(){
-        if(_data){
-            delete _data;
-            _data = nullptr;
-        }
-
-    }
-private:
-    ItemDelegate* _data;
-    Item(ItemDelegate* item) : _data(item){}
-    friend class ItemManager;
-    friend class PlayerCharacter;
-};
-
-
-class Item : public ItemDelegate{
+class EquipmentDelegate  : public ItemDelegate{
 public:
     const std::uint32_t UniqueId;
     CoreStats Stats;
 protected:
-    Item(std::string name, CoreStats cstats);
+    EquipmentDelegate (std::string name, CoreStats cstats);
 private:
 
 };
 
 enum class ARMORSLOT{ HELMET, CHEST, LEGS, BOOTS, RING1, GLOVE, NUM_SLOTS };
-class Armor final : public Item {
+class Armor final : public EquipmentDelegate  {
 public:
     ARMORSLOT Slot;
-
-
     GETTYPE
 
-
 private:
-    Armor(std::string name, CoreStats cstats, ARMORSLOT slot) : Item(name, cstats), Slot(slot){}
+    Armor(std::string name, CoreStats cstats, ARMORSLOT slot) : EquipmentDelegate (name, cstats), Slot(slot){}
     Armor() = delete;
     Armor(const Armor&) = delete;
     Armor(const Armor&&) = delete;
@@ -90,7 +67,7 @@ private:
 };
 
 enum class WEAPONSLOT{ MELEE, RANGED, NUM_SLOTS };
-class Weapon final : public Item{
+class Weapon final : public EquipmentDelegate {
 public:
     WEAPONSLOT Slot;
     damagetype MinDamage;
@@ -101,13 +78,49 @@ public:
 
 private:
     Weapon(std::string name, CoreStats cstats, WEAPONSLOT slot, damagetype min, damagetype max, bool twohanded = false)
-            : Item(name, cstats), Slot(slot), MinDamage(min), MaxDamage(max), is2Hand(twohanded){
+            : EquipmentDelegate(name, cstats), Slot(slot), MinDamage(min), MaxDamage(max), is2Hand(twohanded) {
     }
+
     Weapon() = delete;
-    Weapon(const Weapon&) = delete;
-    Weapon(const Weapon&&) = delete;
-
+    Weapon(const Weapon &) = delete;
+    Weapon(const Weapon &&) = delete;
     friend class ItemManager;
-
 };
 
+#include <iostream>
+
+class Item{
+public:
+    const ItemDelegate* GetData() { return _data; }
+    ~Item(){
+        if(_data){
+            delete _data;
+            _data = nullptr;
+        }
+    }
+
+    bool getMarkForDeletion() const {return marked_for_deletion;}
+
+private:
+    ItemDelegate* _data;
+    bool marked_for_deletion = false;
+    Item(ItemDelegate* item) : _data(item){}
+    friend class ItemManager;
+    friend class PlayerCharacter;
+
+    friend std::ostream& operator<<(std::ostream& os, const Item& t) {
+        Armor* tmp_cast = dynamic_cast<Armor*>(t._data);
+        if (tmp_cast) {
+            return os << tmp_cast->Name << "(Armor: " << tmp_cast->Stats.Armor << ", Resist: " << tmp_cast->Stats.ElementResistance << ')';
+        }
+        Weapon* tmp_cast2 = dynamic_cast<Weapon*>(t._data);
+        if (tmp_cast2) {
+            return  os << tmp_cast2->Name << "(Damage: " << tmp_cast2->MinDamage << '-' << tmp_cast2->MaxDamage << ')';
+        }
+        Potion* tmp_cast3 = dynamic_cast<Potion*>(t._data);
+        if (tmp_cast3) {
+            return os << tmp_cast3->Name << '(' << tmp_cast3->Quantity << ')';
+        }
+        return os;
+    }
+};

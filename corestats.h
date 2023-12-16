@@ -12,6 +12,18 @@ struct CoreStats{
     stattype Armor= 0;
     stattype ElementResistance= 0;
 
+    CoreStats(){
+        Strength = 0;
+        Intellect= 0;
+        Agility= 0;
+        Armor= 0;
+        ElementResistance= 0;
+    }
+
+    CoreStats(stattype s, stattype i, stattype ag, stattype arm, stattype eres)
+        : Strength(s), Intellect(i), Agility(ag), Armor(arm), ElementResistance(eres){
+    }
+
     CoreStats& operator+=(const CoreStats& rhs){
         this->Strength += rhs.Strength;
         this->Intellect += rhs.Intellect;

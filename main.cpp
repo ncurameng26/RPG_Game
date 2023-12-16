@@ -3,54 +3,16 @@
 #include "itemmanager.h"
 
 int main() {
-
     // just test code for now, replace 'Warrior' with your class to test
     PlayerCharacter p1(new Warrior());
 
-    {
-        CoreStats plate_armor_stats;
-        plate_armor_stats.Armor = 15;
-        plate_armor_stats.ElementResistance = 30;
-        plate_armor_stats.Strength = 30;
-        plate_armor_stats.Agility = 30;
-        plate_armor_stats.Intellect = 30;
-        Item* FullPlateMail = ItemManager::CreateArmor("Shiny Plate Armor", plate_armor_stats, ARMORSLOT::CHEST);
-        if(p1.equip(FullPlateMail)){
-            std::cout << "equip success! \n";
-        }
-        else{
-            std::cout << "equip failed!";
-        }
-    }
+    Item* FullPlateMail = ItemManager::CreateArmor("Shiny Plate Armor", CoreStats(0, 0, 0, 5, 3), ARMORSLOT::CHEST);
+    Item* LeatherArmor = ItemManager::CreateArmor("Plain Leather Armor", CoreStats(0, 0, 0, 2, 1), ARMORSLOT::CHEST);
+    Item* LongSword = ItemManager::CreateWeapon("Long Sword", CoreStats(), WEAPONSLOT::MELEE, 3, 9);
 
-    {
-        CoreStats leather_helm_armor_stats;
-        leather_helm_armor_stats.Armor = 2;
-        leather_helm_armor_stats.ElementResistance = 2;
-        Item* LeatherHelm = ItemManager::CreateArmor("Leather Helm", leather_helm_armor_stats, ARMORSLOT::HELMET);
-        if(p1.equip(LeatherHelm)){
-            std::cout << "equip success! \n";
-        }
-        else{
-            std::cout << "equip failed!";
-        }
-    }
-
-    {
-        Item* LongSword = ItemManager::CreateWeapon("Long Sword", CoreStats(), WEAPONSLOT::MELEE, 3, 9);
-        if(p1.equip(LongSword)){
-            std::cout << "equip success! \n";
-        }
-        else{
-            std::cout << "equip failed!";
-        }
-    }
-
-
-
-
-
-
+    ItemManager::Equip(FullPlateMail, &p1);
+    ItemManager::Equip(LeatherArmor, &p1);
+    ItemManager::Equip(LongSword, &p1);
 
     for (int i = 0; i < 2; i++) {
         std::cout
@@ -59,29 +21,11 @@ int main() {
                 << "-EXP: " << p1.getCurrentEXP() << '/' << p1.getEXPToNextLevel() << '\n'
                 << "-HP: " << p1.getCurrentHP() << '/' << p1.getMaxHP() << '\n'
                 << "-MP: " << p1.getCurrentMP() << '/' << p1.getMaxMP() << '\n'
-                << "-Strength: " << p1.getTotalStrength() << '\n'
+                << "-Stength: " << p1.getTotalStrength() << '\n'
                 << "-Intellect: " << p1.getTotalIntellect() << '\n'
                 << "-Agility: " << p1.getTotalAgility() << '\n'
                 << "-Armor: " << p1.getTotalArmor() << '\n'
-                << "-Resist: " << p1.getTotalElementResist() << '\n';
-
-        auto AllAbilities= p1.getAbilityList();
-
-
-        std::cout << "-Armor:\n";
-        for (int i = 0; i < (int)ARMORSLOT::NUM_SLOTS; i++) {
-            const Armor* tmp = dynamic_cast<Armor*>(p1.getEquippedArmor(i));
-            if(tmp){
-                std::cout<< "" << tmp->Name << ", A:(" << tmp->Stats.Armor <<  ") R:(" << tmp->Stats.ElementResistance << ")" << '\n';
-
-            }
-        }
-        std::cout << "-Abilities:\n";
-        for (auto& abil : AllAbilities) {
-            std::cout << "  -" << abil.Name << '\n';
-        }
-
-
+                << "-Resist: " << p1.getTotalElementResistance() << '\n';
 
         auto AllBuffs = p1.getBuffList();
         std::cout << "-Buffs:\n";
@@ -89,39 +33,71 @@ int main() {
             std::cout << "  -" << buff.Name << '\n';
         }
 
+        auto AllAbilities = p1.getAbilityList();
+        std::cout << "-Abilities:\n";
+        for (auto& abil : AllAbilities) {
+            std::cout << "  -" << abil.Name << '\n';
+        }
 
+        std::cout << "-Armor:\n";
+        for (int i = 0; i < (int)ARMORSLOT::NUM_SLOTS; i++) {
+            const Armor* tmp = dynamic_cast<Armor*>(p1.getEquippedArmor(i));
+
+            if (tmp) {
+                std::cout << " " << tmp->Name << ", A:(" << tmp->Stats.Armor << ") R:(" << tmp->Stats.Armor << ")\n";
+            }
+        }
 
         std::cout << "-Weapons:\n";
         for (int i = 0; i < (int)WEAPONSLOT::NUM_SLOTS; i++) {
-            const Weapon* tmp = dynamic_cast<Weapon*>(p1.getEquippedWeapons(i));
-            if(tmp){
-                std::cout<< "" << tmp->Name << ", D:(" << tmp->MinDamage <<  "-" << tmp->MaxDamage << ")" << '\n';
+            const Weapon* tmp = dynamic_cast<Weapon*>(p1.getEquippedWeapon(i));
 
+            if (tmp) {
+                std::cout << " " << tmp->Name << ", D:(" << tmp->MinDamage << "-" << tmp->MaxDamage << ")\n";
             }
         }
 
         if (i < 1) {
             p1.gainEXP(100u);
-            Buff arm_buff("Stone Shield", 10, 3, 3, 3, 3);
+            Buff arm_buff("ThickSkin", 0, 0, 0, 2, 2);
             p1.applyBuff(arm_buff);
         }
     }
 
-    std::cout <<"Health Before Damage: " << p1.getCurrentHP() << "\n";
-
-    p1.takeDamage(1);
-
-    std::cout <<"Health After Damage: " << p1.getCurrentHP() << "\n";
-
-
+    std::cout << "health before taking damage: " << p1.getCurrentHP() << '/' << p1.getMaxHP() << '\n';
+    p1.takeDamage(20);
+    std::cout << "health after taking damage: " << p1.getCurrentHP() << '/' << p1.getMaxHP() << '\n';
     Item* HealPotion = ItemManager::CreatePotion("Minor Heal Potion", 3u, 3u);
+    ItemManager::MoveToBackpack(HealPotion, &p1);
+    ItemManager::Use(HealPotion, &p1);
+    std::cout << "health after using potion: " << p1.getCurrentHP() << '/' << p1.getMaxHP() << '\n';
 
-    std::cout <<"Health Before Pot: " << p1.getCurrentHP() << "\n";
+    ItemManager::MoveToBackpack(
+            ItemManager::CreateWeapon("Rusty Hand Axe", CoreStats(), WEAPONSLOT::MELEE, 2, 4),
+            &p1);
 
-    p1.use(HealPotion);
+    {
+        auto inv = p1.getBackpackList();
+        std::cout << "Inventory: ";
+        for (auto it : inv) {
+            std::cout << *it << ", ";
+        }
 
-    std::cout <<"Health After Pot: " << p1.getCurrentHP() << "\n";
+        ItemManager::Use(HealPotion, &p1);
+        ItemManager::Use(HealPotion, &p1);
+    }
+    std::cout << '\n';
+    std::cout << "health after using 2 potions: " << p1.getCurrentHP() << '/' << p1.getMaxHP() << '\n';
 
+    {
+        auto inv = p1.getBackpackList();
+        std::cout << "Inventory (after using potions): ";
+        for (auto it : inv) {
+            std::cout << *it << ", ";
+        }
+    }
+
+    std::cout << "\n----END\n\n\n\n";
 
     return 0;
 }

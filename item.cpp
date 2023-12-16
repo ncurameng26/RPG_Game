@@ -6,6 +6,6 @@
 
 static std::uint32_t  EQUIPMENTUNIQUEID = 0u;
 
-Item::Item(std::string name, CoreStats cstats)
+EquipmentDelegate::EquipmentDelegate(std::string name, CoreStats cstats)
 : ItemDelegate(name), Stats(cstats), UniqueId(++EQUIPMENTUNIQUEID){
 };
