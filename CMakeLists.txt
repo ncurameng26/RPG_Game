@@ -10,4 +10,10 @@ add_executable(RPGGame main.cpp
         da.h
         playercharacter.h
         ability.h
+        buff.h
+        types.h
+        corestats.h
+        item.h
+        item.cpp
+        itemmanager.h
 )

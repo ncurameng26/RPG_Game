@@ -2,10 +2,9 @@
 // Created by natha on 12/10/2023.
 //
 
-#include <cstdint>
 #pragma once
+#include "types.h"
 
-typedef std::uint16_t welltype;
 
 class PointWell {
 public:
@@ -26,6 +25,8 @@ public:
     welltype getCurrentFullness(){
         return CurrentFullness;
     }
+
+    bool isFull() {return (CurrentFullness == MaxWell);}
 
 
 
@@ -50,10 +51,6 @@ public:
         MaxWell = 1;
     }
 
-//    PointWell(welltype wellSize){ //simple constructor
-//        CurrentFullness = wellSize;
-//        MaxWell = wellSize;
-//    }
 
     PointWell(welltype c, welltype m){
         CurrentFullness = c;

@@ -61,6 +61,12 @@ build CMakeFiles/RPGGame.dir/pointwell.cpp.obj: CXX_COMPILER__RPGGame_unscanned_
   OBJECT_DIR = CMakeFiles\RPGGame.dir
   OBJECT_FILE_DIR = CMakeFiles\RPGGame.dir
 
+build CMakeFiles/RPGGame.dir/item.cpp.obj: CXX_COMPILER__RPGGame_unscanned_Debug C$:/Users/natha/OneDrive/Desktop/Projects/RPGGame/item.cpp || cmake_object_order_depends_target_RPGGame
+  DEP_FILE = CMakeFiles\RPGGame.dir\item.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\RPGGame.dir
+  OBJECT_FILE_DIR = CMakeFiles\RPGGame.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target RPGGame
@@ -69,7 +75,7 @@ build CMakeFiles/RPGGame.dir/pointwell.cpp.obj: CXX_COMPILER__RPGGame_unscanned_
 #############################################
 # Link the executable RPGGame.exe
 
-build RPGGame.exe: CXX_EXECUTABLE_LINKER__RPGGame_Debug CMakeFiles/RPGGame.dir/main.cpp.obj CMakeFiles/RPGGame.dir/pointwell.cpp.obj
+build RPGGame.exe: CXX_EXECUTABLE_LINKER__RPGGame_Debug CMakeFiles/RPGGame.dir/main.cpp.obj CMakeFiles/RPGGame.dir/pointwell.cpp.obj CMakeFiles/RPGGame.dir/item.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\RPGGame.dir
