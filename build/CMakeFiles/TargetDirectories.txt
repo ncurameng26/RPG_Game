@@ -1,0 +1,3 @@
+C:/Users/natha/OneDrive/Desktop/Projects/RPGGame/build/CMakeFiles/RPGGame.dir
+C:/Users/natha/OneDrive/Desktop/Projects/RPGGame/build/CMakeFiles/edit_cache.dir
+C:/Users/natha/OneDrive/Desktop/Projects/RPGGame/build/CMakeFiles/rebuild_cache.dir
